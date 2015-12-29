@@ -12,30 +12,30 @@ import java.io.IOException;
  * Date:    12/28/2015.
  */
 public class BirdApplet extends Applet implements Runnable{
+
     private int x_pos = 80;
     private int y_pos = 100;
     private int radius = 20;
-    private int speed = 4;
-    private boolean upwardMotion;
+    private double speed = -10;
+    private double acc = -.2;
     private BufferedImage image;
 
     public void run() {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
-        while (true) {
-            //Check for ball's Y position
-            if((y_pos + radius >= image.getHeight())){
-                upwardMotion = true;
-            }else if((y_pos - radius) <= 0){
-                upwardMotion = false;
-            }
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            //Move ball forward or backward
-            if(upwardMotion){
-                y_pos -= speed;
-            }else{
-                y_pos += speed;
-            }
+        while (true) {
+
+            // gravity changes circles speed
+            speed += acc;
+
+            // circle's position changes by speed
+            y_pos -= speed;
 
             repaint();
 
@@ -46,6 +46,9 @@ public class BirdApplet extends Applet implements Runnable{
             }
 
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+
+            if (  (y_pos - radius) <= 0  || (y_pos + radius >= image.getHeight() ) )
+                break;
         }
     }
 
@@ -60,14 +63,14 @@ public class BirdApplet extends Applet implements Runnable{
         try {
             image = ImageIO.read(this.getClass().getResourceAsStream("bg.png")); //Load the background image
         } catch (IOException e) {
-            e.printStackTrace(); //If it fails, fuck, print it out.
+            e.printStackTrace(); //If it fails, print it out.
         }
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                System.out.println("Click");
-                upwardMotion = !upwardMotion;
+                //System.out.println("Click");
+                resetSpeed();
             }
         });
 
@@ -80,8 +83,8 @@ public class BirdApplet extends Applet implements Runnable{
                 //"1" starts a new game?
                 switch (e.getKeyCode()) {
                     case (KeyEvent.VK_SPACE):
-                        System.out.println("Space");
-                        upwardMotion = !upwardMotion;
+                        //System.out.println("Space");
+                        resetSpeed();
                         break;
                 }
             }
@@ -107,4 +110,9 @@ public class BirdApplet extends Applet implements Runnable{
         g.setColor(Color.red);
         g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
     }
+
+    private void resetSpeed() {
+        speed = 8;
+    }
+
 }
