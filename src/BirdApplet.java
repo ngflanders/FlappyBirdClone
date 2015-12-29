@@ -66,6 +66,8 @@ public class BirdApplet extends Applet implements Runnable{
             e.printStackTrace(); //If it fails, print it out.
         }
 
+        imageHeight = image.getHeight();
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
