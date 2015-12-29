@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
@@ -53,37 +52,54 @@ public class BirdApplet extends Applet implements Runnable{
     }
 
 
+    /**
+     * Initialize all components of the Application.
+     *
+     * [1] Setting the size of the applet window
+     *
+     * [2] Here we remove the MenuBar from all frames. Instead of trying to locate
+     * the exact frame which contains the MenuBar, we cycle through all of them
+     * and eventually remove it.
+     *
+     * [3] We start by trying to read the image from the source file. If that
+     * succeeds, we are able to add the loaded image to |image|. Otherwise,
+     * print what went wrong to the console.
+     *
+     * [4] Adding a mouse listener to the applet so we can control the bird.
+     *
+     * [5] Adding a keyboard listener to the applet so we can control the bird.
+     */
     public void init() {
+        //See point [1]
         setSize(288,388);
+
+        //See point [2]
         for (Frame frame : Frame.getFrames()) {
             frame.setMenuBar(null);
             frame.pack();
         }
 
+        //See point [3]
         try {
-            image = ImageIO.read(this.getClass().getResourceAsStream("bg.png")); //Load the background image
+            image = ImageIO.read(this.getClass().getResourceAsStream("bg.png"));
         } catch (IOException e) {
-            e.printStackTrace(); //If it fails, print it out.
+            e.printStackTrace();
         }
 
+        //See point [4]
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                //System.out.println("Click");
                 resetSpeed();
             }
         });
 
+        //See point [5]
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                //I'm guessing you make this a switch statement
-                //in the case that we want to add more options, yet?
-                //aka, "esc" closes the game or something.
-                //"1" starts a new game?
                 switch (e.getKeyCode()) {
                     case (KeyEvent.VK_SPACE):
-                        //System.out.println("Space");
                         resetSpeed();
                         break;
                 }
@@ -114,5 +130,4 @@ public class BirdApplet extends Applet implements Runnable{
     private void resetSpeed() {
         speed = 8;
     }
-
 }
