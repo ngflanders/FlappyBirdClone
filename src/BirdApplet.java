@@ -46,9 +46,13 @@ public class BirdApplet extends Applet implements Runnable{
 
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 
-            if (  (y_pos - radius) <= 0  || (y_pos + radius >= image.getHeight() ) )
+            if (  y_pos + radius >= image.getHeight() )
                 break;
+
+            if ( y_pos - radius <= 0 )
+                y_pos = radius;
         }
+
     }
 
 
@@ -128,6 +132,6 @@ public class BirdApplet extends Applet implements Runnable{
     }
 
     private void resetSpeed() {
-        speed = 8;
+        speed = 6;
     }
 }
