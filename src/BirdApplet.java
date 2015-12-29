@@ -26,7 +26,7 @@ public class BirdApplet extends Applet implements Runnable {
 
             try {
                 Thread.sleep(20);
-                //throw new InterruptedException();
+                throw new InterruptedException();
             } catch (InterruptedException e) {
                 // nothing
             }
