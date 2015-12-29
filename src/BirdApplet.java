@@ -16,7 +16,7 @@ public class BirdApplet extends Applet implements Runnable{
     private int x_pos = 80;
     private int y_pos = 100;
     private int radius = 20;
-    private double speed = -10;
+    private double speed = -5;
     private double acc = -.2;
     private BufferedImage image;
 
@@ -24,7 +24,7 @@ public class BirdApplet extends Applet implements Runnable{
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -65,8 +65,6 @@ public class BirdApplet extends Applet implements Runnable{
         } catch (IOException e) {
             e.printStackTrace(); //If it fails, print it out.
         }
-
-        imageHeight = image.getHeight();
 
         addMouseListener(new MouseAdapter() {
             @Override
