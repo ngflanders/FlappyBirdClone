@@ -1,12 +1,14 @@
 import java.applet.Applet;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Project: FlappyBirdClone
  * Author:  Nick Flanders
  * Date:    12/28/2015.
  */
-public class BirdApplet extends Applet implements Runnable {
+public class BirdApplet extends Applet implements Runnable, KeyListener {
 
     int x_pos = 10;
     int y_pos = 100;
@@ -52,6 +54,7 @@ public class BirdApplet extends Applet implements Runnable {
             frame.setMenuBar(null);
             frame.pack();
         }
+        addKeyListener(this);
     }
 
     public void start() {
@@ -73,6 +76,21 @@ public class BirdApplet extends Applet implements Runnable {
         g.setColor(Color.red);
 
         g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
+    }
+
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case (KeyEvent.VK_SPACE):
+                System.out.println("Space");
+                backwarMotion = !backwarMotion;
+                break;
+        }
+    }
+
+    public void keyReleased(KeyEvent e){
+    }
+
+    public void keyTyped(KeyEvent e){
     }
 
 
