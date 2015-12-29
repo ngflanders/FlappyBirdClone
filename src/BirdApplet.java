@@ -11,13 +11,26 @@ public class BirdApplet extends Applet implements Runnable {
     int x_pos = 10;
     int y_pos = 100;
     int radius = 20;
+    boolean backwarMotion;
 
     public void run() {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
         while (true) {
 
-            x_pos++;
+            //Check for ball's position
+            if((x_pos + radius >= getBounds().width)){
+                backwarMotion = true;
+            }else if((x_pos - radius) <= 0){
+                backwarMotion = false;
+            }
+
+            //Move ball forward or backward
+            if(backwarMotion){
+                x_pos--;
+            }else{
+                x_pos++;
+            }
 
             repaint();
 
