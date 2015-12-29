@@ -28,7 +28,7 @@ public class BirdApplet extends Applet implements Runnable {
                 Thread.sleep(20);
                 throw new InterruptedException();
             } catch (InterruptedException e) {
-                // nothing
+                e.printStackTrace();
             }
 
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
@@ -36,7 +36,14 @@ public class BirdApplet extends Applet implements Runnable {
     }
 
 
-    public void init() { }
+    public void init() {
+        setSize(340,470);
+        Frame[] frames = Frame.getFrames();
+        for (Frame frame : frames) {
+            frame.setMenuBar(null);
+            frame.pack();
+        }
+    }
 
     public void start() {
         Thread th = new Thread(this);
