@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
@@ -16,7 +15,8 @@ public class BirdApplet extends Applet implements Runnable{
     private int y_pos = 100;
     private int radius = 20;
     private int speed = 4;
-    private boolean upwardMotion;
+    private int imageHeight;
+    private boolean downwardMotion;
     private BufferedImage image;
 
     public void run() {
@@ -24,14 +24,14 @@ public class BirdApplet extends Applet implements Runnable{
 
         while (true) {
             //Check for ball's Y position
-            if((y_pos + radius >= image.getHeight())){
-                upwardMotion = true;
+            if((y_pos + radius >= imageHeight)){
+                downwardMotion = true;
             }else if((y_pos - radius) <= 0){
-                upwardMotion = false;
+                downwardMotion = false;
             }
 
             //Move ball forward or backward
-            if(upwardMotion){
+            if(downwardMotion){
                 y_pos -= speed;
             }else{
                 y_pos += speed;
@@ -63,11 +63,13 @@ public class BirdApplet extends Applet implements Runnable{
             e.printStackTrace(); //If it fails, fuck, print it out.
         }
 
+        imageHeight = image.getHeight();
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 System.out.println("Click");
-                upwardMotion = !upwardMotion;
+                downwardMotion = !downwardMotion;
             }
         });
 
@@ -81,7 +83,7 @@ public class BirdApplet extends Applet implements Runnable{
                 switch (e.getKeyCode()) {
                     case (KeyEvent.VK_SPACE):
                         System.out.println("Space");
-                        upwardMotion = !upwardMotion;
+                        downwardMotion = !downwardMotion;
                         break;
                 }
             }
