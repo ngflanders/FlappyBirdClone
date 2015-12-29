@@ -1,26 +1,30 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * Project: FlappyBirdClone
  * Author:  Nick Flanders
  * Date:    12/28/2015.
  */
-public class BirdApplet extends JApplet implements Runnable{
-
-    int x_pos = 80;
-    int y_pos = 100;
-    int radius = 20;
-    int speed = 4;
-    boolean upwardMotion;
+public class BirdApplet extends Applet implements Runnable{
+    private int x_pos = 80;
+    private int y_pos = 100;
+    private int radius = 20;
+    private int speed = 4;
+    private boolean upwardMotion;
+    private BufferedImage image;
 
     public void run() {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
         while (true) {
             //Check for ball's Y position
-            if((y_pos + radius >= getBounds().height)){
+            if((y_pos + radius >= image.getHeight())){
                 upwardMotion = true;
             }else if((y_pos - radius) <= 0){
                 upwardMotion = false;
@@ -47,10 +51,16 @@ public class BirdApplet extends JApplet implements Runnable{
 
 
     public void init() {
-        setSize(340,470);
+        setSize(288,388);
         for (Frame frame : Frame.getFrames()) {
             frame.setMenuBar(null);
             frame.pack();
+        }
+
+        try {
+            image = ImageIO.read(this.getClass().getResourceAsStream("bg.png")); //Load the background image
+        } catch (IOException e) {
+            e.printStackTrace(); //If it fails, fuck, print it out.
         }
 
         addMouseListener(new MouseAdapter() {
@@ -88,12 +98,13 @@ public class BirdApplet extends JApplet implements Runnable{
     public void destroy() { }
 
     public void paint (Graphics g2) {
-        super.paint(g2);
         Graphics2D g = (Graphics2D) g2;
+        super.paint(g); //Do not move/remove.
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g.setColor(Color.red);
+        g.drawImage(image, 0, 0, null); //Draws the background image
 
+        g.setColor(Color.red);
         g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
     }
 }
