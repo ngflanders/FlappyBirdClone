@@ -7,21 +7,18 @@ import java.awt.*;
  * Date:    12/28/2015.
  */
 public class BirdApplet extends Applet implements Runnable {
-    /**
-     * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
-     * <code>run</code> method to be called in that separately executing
-     * thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may
-     * take any action whatsoever.
-     *
-     * @see Thread#run()
-     */
+
+    int x_pos = 10;
+    int y_pos = 100;
+    int radius = 20;
+
     public void run() {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
         while (true) {
+
+            x_pos++;
+
             repaint();
 
             try {
@@ -46,7 +43,11 @@ public class BirdApplet extends Applet implements Runnable {
 
     public void destroy() { }
 
-    public void paint (Graphics g) { }
+    public void paint (Graphics g) {
+        g.setColor(Color.red);
+
+        g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
+    }
 
 
 }
