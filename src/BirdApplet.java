@@ -1,37 +1,36 @@
-import java.applet.Applet;
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 /**
  * Project: FlappyBirdClone
  * Author:  Nick Flanders
  * Date:    12/28/2015.
  */
-public class BirdApplet extends Applet implements Runnable, KeyListener {
+public class BirdApplet extends JApplet implements Runnable{
 
-    int x_pos = 10;
+    int x_pos = 80;
     int y_pos = 100;
     int radius = 20;
-    boolean backwarMotion;
+    int speed = 4;
+    boolean upwardMotion;
 
     public void run() {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
         while (true) {
-
-            //Check for ball's position
-            if((x_pos + radius >= getBounds().width)){
-                backwarMotion = true;
-            }else if((x_pos - radius) <= 0){
-                backwarMotion = false;
+            //Check for ball's Y position
+            if((y_pos + radius >= getBounds().height)){
+                upwardMotion = true;
+            }else if((y_pos - radius) <= 0){
+                upwardMotion = false;
             }
 
             //Move ball forward or backward
-            if(backwarMotion){
-                x_pos--;
+            if(upwardMotion){
+                y_pos -= speed;
             }else{
-                x_pos++;
+                y_pos += speed;
             }
 
             repaint();
@@ -49,12 +48,34 @@ public class BirdApplet extends Applet implements Runnable, KeyListener {
 
     public void init() {
         setSize(340,470);
-        Frame[] frames = Frame.getFrames();
-        for (Frame frame : frames) {
+        for (Frame frame : Frame.getFrames()) {
             frame.setMenuBar(null);
             frame.pack();
         }
-        addKeyListener(this);
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("Click");
+                upwardMotion = !upwardMotion;
+            }
+        });
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                //I'm guessing you make this a switch statement
+                //in the case that we want to add more options, yet?
+                //aka, "esc" closes the game or something.
+                //"1" starts a new game?
+                switch (e.getKeyCode()) {
+                    case (KeyEvent.VK_SPACE):
+                        System.out.println("Space");
+                        upwardMotion = !upwardMotion;
+                        break;
+                }
+            }
+        });
     }
 
     public void start() {
@@ -67,9 +88,7 @@ public class BirdApplet extends Applet implements Runnable, KeyListener {
     public void destroy() { }
 
     public void paint (Graphics g2) {
-        /**
-         * Added to fix antialiasing
-         */
+        super.paint(g2);
         Graphics2D g = (Graphics2D) g2;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -77,21 +96,4 @@ public class BirdApplet extends Applet implements Runnable, KeyListener {
 
         g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
     }
-
-    public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case (KeyEvent.VK_SPACE):
-                System.out.println("Space");
-                backwarMotion = !backwarMotion;
-                break;
-        }
-    }
-
-    public void keyReleased(KeyEvent e){
-    }
-
-    public void keyTyped(KeyEvent e){
-    }
-
-
 }
