@@ -19,6 +19,8 @@ public class BirdApplet extends Applet implements Runnable{
     private int radius = 20;
     private int scroll = 0;
     private int bgImgWidth;
+    private int score = 0;
+    private int distance = 0;
     private double speed = -5;
     private double acc = -.2;
     private BufferedImage bgImage;
@@ -58,6 +60,9 @@ public class BirdApplet extends Applet implements Runnable{
 
             // decrement scroll variable for shifting the background
             scroll -= 1;
+            distance += 1;
+            if (distance % 100 == 0)
+                score += 1;
 
             // gravity changes circles speed
             speed += acc;
@@ -223,6 +228,7 @@ public class BirdApplet extends Applet implements Runnable{
             g.drawString("Press space to start", 5, 15);
         } else {
             g.drawString("Press space to jump", 5, 15);
+            g.drawString("Score: " + score, bgImgWidth - 100, 15);
         }
 
         // TODO generate pipes randomly
