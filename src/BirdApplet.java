@@ -26,7 +26,6 @@ public class BirdApplet extends Applet implements Runnable{
 
 
     public static int randInt(int min, int max) {
-
         return rand.nextInt((max - min) + 1) + min;
     }
 
