@@ -222,7 +222,8 @@ public class BirdApplet extends Applet implements Runnable{
         // g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
         g.drawImage(birdImage, x_pos-radius, y_pos-radius,null);
 
-
+        Font currentFont = new Font("TimesRoman", Font.ITALIC, 50);
+        g.setFont(currentFont);
         // start screen instructions
         if (isStartScreen) {
             g.drawString("Press space to start", 5, 15);
