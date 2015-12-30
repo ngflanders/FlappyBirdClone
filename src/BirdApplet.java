@@ -15,9 +15,12 @@ public class BirdApplet extends Applet implements Runnable{
     private int x_pos = 80;
     private int y_pos = 100;
     private int radius = 20;
+    private int scroll = 0;
+    private int imgWidth;
     private double speed = -5;
     private double acc = -.2;
     private BufferedImage image;
+
 
     public void run() {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
@@ -29,6 +32,9 @@ public class BirdApplet extends Applet implements Runnable{
         }
 
         while (true) {
+
+            // decrement scroll variable for shifting the background
+            scroll -= 1;
 
             // gravity changes circles speed
             speed += acc;
@@ -86,6 +92,7 @@ public class BirdApplet extends Applet implements Runnable{
         //See point [3]
         try {
             image = ImageIO.read(this.getClass().getResourceAsStream("bg.png"));
+            imgWidth = image.getWidth();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -125,7 +132,16 @@ public class BirdApplet extends Applet implements Runnable{
         super.paint(g); //Do not move/remove.
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g.drawImage(image, 0, 0, null); //Draws the background image
+        //Draws the background image
+        g.drawImage(image, scroll,0,null);
+        g.drawImage(image, scroll+imgWidth, 0, null);
+
+        // if circle reaches midpoint between two images
+        // reset the scroll variable to shift the images
+        if (Math.abs(scroll) == imgWidth) {
+            scroll = 0;
+            System.out.println("==");
+        }
 
         g.setColor(Color.red);
         g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
