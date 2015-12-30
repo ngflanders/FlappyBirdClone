@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Project: FlappyBirdClone
@@ -16,10 +17,18 @@ public class BirdApplet extends Applet implements Runnable{
     private int y_pos = 100;
     private int radius = 20;
     private int scroll = 0;
-    private int imgWidth;
+    private int bgImgWidth;
     private double speed = -5;
     private double acc = -.2;
-    private BufferedImage image;
+    private BufferedImage bgImage;
+    private BufferedImage birdImage;
+    private static Random rand = new Random();
+
+
+    public static int randInt(int min, int max) {
+
+        return rand.nextInt((max - min) + 1) + min;
+    }
 
 
     public void run() {
@@ -52,11 +61,12 @@ public class BirdApplet extends Applet implements Runnable{
 
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 
-            if (  y_pos + radius >= image.getHeight() )
+            if (  y_pos + radius >= bgImage.getHeight() )
                 break;
 
             if ( y_pos - radius <= 0 )
                 y_pos = radius;
+
         }
 
     }
@@ -71,8 +81,8 @@ public class BirdApplet extends Applet implements Runnable{
      * the exact frame which contains the MenuBar, we cycle through all of them
      * and eventually remove it.
      *
-     * [3] We start by trying to read the image from the source file. If that
-     * succeeds, we are able to add the loaded image to |image|. Otherwise,
+     * [3] We start by trying to read the bgImage from the source file. If that
+     * succeeds, we are able to add the loaded bgImage to |bgImage|. Otherwise,
      * print what went wrong to the console.
      *
      * [4] Adding a mouse listener to the applet so we can control the bird.
@@ -91,11 +101,19 @@ public class BirdApplet extends Applet implements Runnable{
 
         //See point [3]
         try {
-            image = ImageIO.read(this.getClass().getResourceAsStream("bg.png"));
-            imgWidth = image.getWidth();
+            bgImage = ImageIO.read(this.getClass().getResourceAsStream("bg.png"));
+            bgImgWidth = bgImage.getWidth();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            birdImage = ImageIO.read(this.getClass().getResourceAsStream("bird.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
 
         //See point [4]
         addMouseListener(new MouseAdapter() {
@@ -132,19 +150,23 @@ public class BirdApplet extends Applet implements Runnable{
         super.paint(g); //Do not move/remove.
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        //Draws the background image
-        g.drawImage(image, scroll,0,null);
-        g.drawImage(image, scroll+imgWidth, 0, null);
+        //Draws the background bgImage
+        g.drawImage(bgImage, scroll,0,null);
+        g.drawImage(bgImage, scroll+ bgImgWidth, 0, null);
 
         // if circle reaches midpoint between two images
         // reset the scroll variable to shift the images
-        if (Math.abs(scroll) == imgWidth) {
+        if (Math.abs(scroll) == bgImgWidth)
             scroll = 0;
-            System.out.println("==");
-        }
 
-        g.setColor(Color.red);
-        g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
+
+        //g.setColor(Color.red);
+        //g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
+        g.drawImage(birdImage, x_pos-radius, y_pos-radius,null);
+
+
+
+
     }
 
     private void resetSpeed() {
