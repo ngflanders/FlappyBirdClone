@@ -26,7 +26,7 @@ public class BirdApplet extends Applet implements Runnable{
     private BufferedImage birdImage;
     private Random rand = new Random();
 
-    @Override
+
     public void run() {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
@@ -52,7 +52,7 @@ public class BirdApplet extends Applet implements Runnable{
             repaint();
 
             try {
-                Thread.sleep(20);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -85,7 +85,6 @@ public class BirdApplet extends Applet implements Runnable{
      *
      * [5] Adding a keyboard listener to the applet so we can control the bird.
      */
-    @Override
     public void init() {
         //See point [1]
         setSize(288,388);
@@ -128,16 +127,16 @@ public class BirdApplet extends Applet implements Runnable{
         });
     }
 
-    @Override
+
     public void start() {
         Thread th = new Thread(this);
         th.start();
     }
 
-    @Override
+
     public void stop() { }
 
-    @Override
+
     public void destroy() { }
 
 
@@ -156,7 +155,6 @@ public class BirdApplet extends Applet implements Runnable{
      *
      * [4] Draw the double buffered image to the screen.
      */
-    @Override
     public void update(Graphics g) {
         //See point [1]
         if(dbImage == null){
@@ -177,7 +175,6 @@ public class BirdApplet extends Applet implements Runnable{
     }
 
 
-    @Override
     public void paint (Graphics g2) {
         Graphics2D g = (Graphics2D) g2;
         super.paint(g); //Do not move/remove.
