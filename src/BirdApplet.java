@@ -24,12 +24,7 @@ public class BirdApplet extends Applet implements Runnable{
     private double acc = -.35;
     private BufferedImage bgImage;
     private BufferedImage birdImage;
-    private static Random rand = new Random();
-
-
-    public static int randInt(int min, int max) {
-        return rand.nextInt((max - min) + 1) + min;
-    }
+    private Random rand = new Random();
 
     @Override
     public void run() {
@@ -40,6 +35,8 @@ public class BirdApplet extends Applet implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        // TODO add start screen
 
         while (true) {
 
@@ -179,6 +176,7 @@ public class BirdApplet extends Applet implements Runnable{
         g.drawImage(dbImage, 0, 0, this);
     }
 
+
     @Override
     public void paint (Graphics g2) {
         Graphics2D g = (Graphics2D) g2;
@@ -198,9 +196,17 @@ public class BirdApplet extends Applet implements Runnable{
         //g.setColor(Color.red);
         //g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
         g.drawImage(birdImage, x_pos-radius, y_pos-radius,null);
+
+
+        // TODO generate pipes randomly
+
     }
 
     private void resetSpeed() {
         speed = 6;
+    }
+
+    private int randInt(int min, int max) {
+        return rand.nextInt((max - min) + 1) + min;
     }
 }
