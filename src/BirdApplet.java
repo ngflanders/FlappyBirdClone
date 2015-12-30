@@ -61,7 +61,7 @@ public class BirdApplet extends Applet implements Runnable{
             // decrement scroll variable for shifting the background
             scroll -= 1;
             distance += 1;
-            if (distance % 100 == 0)
+            if (distance % (bgImgWidth-(x_pos-radius)) == 0)
                 score += 1;
 
             // gravity changes circles speed
@@ -232,6 +232,11 @@ public class BirdApplet extends Applet implements Runnable{
         }
 
         // TODO generate pipes randomly
+        int temp = 100;
+        if (distance % 100 == 0) {
+            temp = distance;
+        }
+        g.drawRect(scroll + bgImgWidth ,0, 20, bgImage.getHeight());
 
     }
 
