@@ -13,13 +13,15 @@ import java.util.Random;
  */
 public class BirdApplet extends Applet implements Runnable{
 
+    private Image dbImage;
+    private Graphics dbGraphics;
     private int x_pos = 80;
     private int y_pos = 100;
     private int radius = 20;
     private int scroll = 0;
     private int bgImgWidth;
     private double speed = -5;
-    private double acc = -.2;
+    private double acc = -.35;
     private BufferedImage bgImage;
     private BufferedImage birdImage;
     private static Random rand = new Random();
@@ -29,7 +31,7 @@ public class BirdApplet extends Applet implements Runnable{
         return rand.nextInt((max - min) + 1) + min;
     }
 
-
+    @Override
     public void run() {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
@@ -65,9 +67,7 @@ public class BirdApplet extends Applet implements Runnable{
 
             if ( y_pos - radius <= 0 )
                 y_pos = radius;
-
         }
-
     }
 
 
@@ -88,6 +88,7 @@ public class BirdApplet extends Applet implements Runnable{
      *
      * [5] Adding a keyboard listener to the applet so we can control the bird.
      */
+    @Override
     public void init() {
         //See point [1]
         setSize(288,388);
@@ -101,13 +102,8 @@ public class BirdApplet extends Applet implements Runnable{
         //See point [3]
         try {
             bgImage = ImageIO.read(this.getClass().getResourceAsStream("bg.png"));
-            bgImgWidth = bgImage.getWidth();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
             birdImage = ImageIO.read(this.getClass().getResourceAsStream("bird.png"));
+            bgImgWidth = bgImage.getWidth();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,15 +131,55 @@ public class BirdApplet extends Applet implements Runnable{
         });
     }
 
+    @Override
     public void start() {
         Thread th = new Thread(this);
         th.start();
     }
 
+    @Override
     public void stop() { }
 
+    @Override
     public void destroy() { }
 
+
+    /**
+     * Added an update method to double-buffer our game.
+     *
+     * [1] If the |dbImage| is null, initialize it to the current
+     * image of the screen. Also initialize |dbGraphics| to the
+     * |dbImage|'s graphics.
+     *
+     * [2] Set our background color for the double buffer and also
+     * fill the rectangle (background) with this color.
+     *
+     * [3] Set the foreground color, and then paint the graphics
+     * or foreground to the screen.
+     *
+     * [4] Draw the double buffered image to the screen.
+     */
+    @Override
+    public void update(Graphics g) {
+        //See point [1]
+        if(dbImage == null){
+            dbImage = createImage(this.getWidth(), this.getHeight());
+            dbGraphics = dbImage.getGraphics();
+        }
+
+        //See point [2]
+        dbGraphics.setColor(getBackground());
+        dbGraphics.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+        //See point [3]
+        dbGraphics.setColor(getForeground());
+        paint(dbGraphics);
+
+        //See point [4]
+        g.drawImage(dbImage, 0, 0, this);
+    }
+
+    @Override
     public void paint (Graphics g2) {
         Graphics2D g = (Graphics2D) g2;
         super.paint(g); //Do not move/remove.
@@ -162,10 +198,6 @@ public class BirdApplet extends Applet implements Runnable{
         //g.setColor(Color.red);
         //g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
         g.drawImage(birdImage, x_pos-radius, y_pos-radius,null);
-
-
-
-
     }
 
     private void resetSpeed() {
