@@ -15,11 +15,8 @@ import java.util.Random;
  */
 public class BirdApplet extends Applet implements Runnable{
 
-    private int score = 0;
-    private Font scoreFont;
-    private Image dbImage;
-    private Graphics dbGraphics;
     private boolean isStartScreen = true;
+    private int score = 0;
     private int x_pos = 80;
     private int y_pos = 100;
     private int radius = 20;
@@ -34,6 +31,9 @@ public class BirdApplet extends Applet implements Runnable{
     private BufferedImage birdImage;
     private BufferedImage upImage;
     private BufferedImage downImage;
+    private Font scoreFont;
+    private Image dbImage;
+    private Graphics dbGraphics;
     private Random rand = new Random();
 
 
@@ -46,7 +46,6 @@ public class BirdApplet extends Applet implements Runnable{
             e.printStackTrace();
         }
 
-
         while (isStartScreen) {
 
             repaint();
@@ -56,10 +55,7 @@ public class BirdApplet extends Applet implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-
         }
-
 
         while (true) {
 
@@ -199,31 +195,30 @@ public class BirdApplet extends Applet implements Runnable{
      * [4] Draw the double buffered image to the screen.
      */
     public void update(Graphics g) {
-        //See point [1]
+        // See point [1]
         if(dbImage == null){
             dbImage = createImage(this.getWidth(), this.getHeight());
             dbGraphics = dbImage.getGraphics();
         }
 
-        //See point [2]
+        // See point [2]
         dbGraphics.setColor(getBackground());
         dbGraphics.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        //See point [3]
+        // See point [3]
         dbGraphics.setColor(getForeground());
         paint(dbGraphics);
 
-        //See point [4]
+        // See point [4]
         g.drawImage(dbImage, 0, 0, this);
     }
 
-
     public void paint (Graphics g2) {
         Graphics2D g = (Graphics2D) g2;
-        super.paint(g); //Do not move/remove.
+        super.paint(g); // Do not move/remove.
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        //Draws the background bgImage
+        // Draws the background bgImage
         g.drawImage(bgImage, scroll,0,null);
         g.drawImage(bgImage, scroll+ bgImgWidth, 0, null);
 
@@ -241,10 +236,6 @@ public class BirdApplet extends Applet implements Runnable{
 
         g.drawImage(downImage, scroll+bgImgWidth, -pipeHeight, null);
         g.drawImage(upImage, scroll+bgImgWidth, bgImgHeight-pipeHeight, null);
-
-
-//        g.drawImage(downImage, scroll+bgImgWidth,-50, null);
-//        g.drawImage(upImage, scroll+bgImgWidth, (2*bgImgHeight/3), null);
 
         // Start screen and points ---DO NOT MOVE POSITION IN CODE---
         g.setFont(scoreFont);
