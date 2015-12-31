@@ -3,32 +3,34 @@ import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 /**
  * Project: FlappyBirdClone
- * Author:  Nick Flanders & Lee Tarnow
- * Date:    12/28/2015
+ * Author:  Nick Flanders
+ * Date:    12/28/2015.
  */
 public class BirdApplet extends Applet implements Runnable{
 
+    private int score = 0;
+    private Font scoreFont;
+    private Image dbImage;
+    private Graphics dbGraphics;
     private boolean isStartScreen = true;
     private int x_pos = 80;
     private int y_pos = 100;
     private int radius = 20;
     private int scroll = 0;
     private int bgImgWidth;
-    private int score = 0;
     private int distance = 0;
     private double speed = -5;
     private double acc = -.2;
     private BufferedImage bgImage;
     private BufferedImage birdImage;
-    private Image dbImage;
-    private Graphics dbGraphics;
     private Random rand = new Random();
-
 
 
     public void run() {
@@ -53,7 +55,6 @@ public class BirdApplet extends Applet implements Runnable{
 
 
         }
-
 
 
         while (true) {
@@ -105,18 +106,21 @@ public class BirdApplet extends Applet implements Runnable{
      * [4] Adding a mouse listener to the applet so we can control the bird.
      *
      * [5] Adding a keyboard listener to the applet so we can control the bird.
+     *
+     * [6] Initializing the score font by importing the scoreFont.ttf from the
+     * project.
      */
     public void init() {
-        // See point [1]
+        //See point [1]
         setSize(288,388);
 
-        // See point [2]
+        //See point [2]
         for (Frame frame : Frame.getFrames()) {
             frame.setMenuBar(null);
             frame.pack();
         }
 
-        // See point [3]
+        //See point [3]
         try {
             bgImage = ImageIO.read(this.getClass().getResourceAsStream("bg.png"));
             birdImage = ImageIO.read(this.getClass().getResourceAsStream("bird.png"));
@@ -125,9 +129,7 @@ public class BirdApplet extends Applet implements Runnable{
             e.printStackTrace();
         }
 
-
-
-        // See point [4]
+        //See point [4]
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -135,20 +137,29 @@ public class BirdApplet extends Applet implements Runnable{
             }
         });
 
-        // See point [5]
+        //See point [5]
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (isStartScreen) {
-                    isStartScreen = false;
-                }
                 switch (e.getKeyCode()) {
                     case (KeyEvent.VK_SPACE):
+                        if (isStartScreen) {
+                            isStartScreen = false;
+                        }
                         resetSpeed();
                         break;
                 }
             }
         });
+
+        //See point [6]
+        try {
+            InputStream myStream = new BufferedInputStream(this.getClass().getResourceAsStream("scoreFont.ttf"));
+            Font ttfBase = Font.createFont(Font.TRUETYPE_FONT, myStream);
+            scoreFont = ttfBase.deriveFont(Font.PLAIN, 24);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 
@@ -180,35 +191,31 @@ public class BirdApplet extends Applet implements Runnable{
      * [4] Draw the double buffered image to the screen.
      */
     public void update(Graphics g) {
-        // See point [1]
+        //See point [1]
         if(dbImage == null){
             dbImage = createImage(this.getWidth(), this.getHeight());
             dbGraphics = dbImage.getGraphics();
         }
 
-        // See point [2]
+        //See point [2]
         dbGraphics.setColor(getBackground());
         dbGraphics.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        // See point [3]
+        //See point [3]
         dbGraphics.setColor(getForeground());
         paint(dbGraphics);
 
-        // See point [4]
+        //See point [4]
         g.drawImage(dbImage, 0, 0, this);
     }
 
 
     public void paint (Graphics g2) {
-
-
-
-
         Graphics2D g = (Graphics2D) g2;
-        super.paint(g); // Do not move/remove.
+        super.paint(g); //Do not move/remove.
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Draws the background bgImage
+        //Draws the background bgImage
         g.drawImage(bgImage, scroll,0,null);
         g.drawImage(bgImage, scroll+ bgImgWidth, 0, null);
 
@@ -218,8 +225,8 @@ public class BirdApplet extends Applet implements Runnable{
             scroll = 0;
 
 
-        // g.setColor(Color.red);
-        // g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
+        //g.setColor(Color.red);
+        //g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
         g.drawImage(birdImage, x_pos-radius, y_pos-radius,null);
 
         Font currentFont = new Font("TimesRoman", Font.ITALIC, 50);
@@ -227,10 +234,11 @@ public class BirdApplet extends Applet implements Runnable{
         // start screen instructions
         if (isStartScreen) {
             g.drawString("Press space to start", 5, 15);
-        } else {
-            g.drawString("Press space to jump", 5, 15);
-            g.drawString("Score: " + score, bgImgWidth - 100, 15);
         }
+
+        //Score
+        g.setFont(scoreFont);
+        g.drawString("" + score, getWidth()/2 - (String.valueOf(score).length() * 6), 40);
 
         // TODO generate pipes randomly
         int temp = 100;
@@ -242,7 +250,7 @@ public class BirdApplet extends Applet implements Runnable{
     }
 
     private void resetSpeed() {
-        speed = 5;
+        speed = 6;
     }
 
     private int randInt(int min, int max) {
