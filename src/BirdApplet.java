@@ -27,7 +27,7 @@ public class BirdApplet extends Applet implements Runnable{
     private int bgImgWidth;
     private int distance = 0;
     private double speed = -5;
-    private double acc = -.2;
+    private double acc = -.25;
     private BufferedImage bgImage;
     private BufferedImage birdImage;
     private Random rand = new Random();
@@ -243,7 +243,7 @@ public class BirdApplet extends Applet implements Runnable{
     }
 
     private void resetSpeed() {
-        speed = 6;
+        speed = 4.5;
     }
 
     private int randInt(int min, int max) {
