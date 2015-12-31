@@ -25,11 +25,15 @@ public class BirdApplet extends Applet implements Runnable{
     private int radius = 20;
     private int scroll = 0;
     private int bgImgWidth;
+    private int bgImgHeight;
     private int distance = 0;
+    private int pipeHeight;
     private double speed = -5;
     private double acc = -.25;
     private BufferedImage bgImage;
     private BufferedImage birdImage;
+    private BufferedImage upImage;
+    private BufferedImage downImage;
     private Random rand = new Random();
 
 
@@ -111,25 +115,28 @@ public class BirdApplet extends Applet implements Runnable{
      * project.
      */
     public void init() {
-        //See point [1]
+        // See point [1]
         setSize(288,388);
 
-        //See point [2]
+        // See point [2]
         for (Frame frame : Frame.getFrames()) {
             frame.setMenuBar(null);
             frame.pack();
         }
 
-        //See point [3]
+        // See point [3]
         try {
             bgImage = ImageIO.read(this.getClass().getResourceAsStream("bg.png"));
             birdImage = ImageIO.read(this.getClass().getResourceAsStream("bird.png"));
+            upImage = ImageIO.read(this.getClass().getResourceAsStream("up.png"));
+            downImage = ImageIO.read(this.getClass().getResourceAsStream("down.png"));
             bgImgWidth = bgImage.getWidth();
+            bgImgHeight = bgImage.getHeight();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //See point [4]
+        // See point [4]
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -137,7 +144,7 @@ public class BirdApplet extends Applet implements Runnable{
             }
         });
 
-        //See point [5]
+        // See point [5]
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -152,7 +159,7 @@ public class BirdApplet extends Applet implements Runnable{
             }
         });
 
-        //See point [6]
+        // See point [6]
         try {
             InputStream myStream = new BufferedInputStream(this.getClass().getResourceAsStream("scoreFont.ttf"));
             Font ttfBase = Font.createFont(Font.TRUETYPE_FONT, myStream);
@@ -231,14 +238,22 @@ public class BirdApplet extends Applet implements Runnable{
         g.setFont(scoreFont);
         if (isStartScreen) {
             g.drawString("Press space to start", 5, 25);
-        }else{
+        } else {
             g.drawString("" + score, getWidth()/2 - (String.valueOf(score).length() * 6), 55);
         }
 
         // TODO generate pipes randomly
 
-        g.drawRect(scroll + bgImgWidth ,0, 20, bgImage.getHeight()/3);
-        g.drawRect(scroll+bgImgWidth, (2*bgImage.getHeight()/3), 20, bgImage.getHeight()/3);
+        if (distance % bgImgWidth  == 0)
+            pipeHeight = randInt(bgImgHeight/8,bgImgHeight/2);
+
+        //g.drawRect(scroll + bgImgWidth ,0, 20, pipeHeight);
+        g.drawImage(downImage, scroll+bgImgWidth,-50, null);
+        g.drawImage(upImage, scroll+bgImgWidth, (2*bgImgHeight/3), null);
+
+
+      //  g.drawRect(scroll+bgImgWidth, (2*bgImage.getHeight()/3), 20, bgImgHeight-pipeHeight);
+
 
     }
 
