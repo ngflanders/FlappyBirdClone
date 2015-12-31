@@ -229,23 +229,21 @@ public class BirdApplet extends Applet implements Runnable{
         //g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
         g.drawImage(birdImage, x_pos-radius, y_pos-radius,null);
 
-        Font currentFont = new Font("TimesRoman", Font.ITALIC, 50);
+        Font currentFont = new Font("TimesRoman", Font.ITALIC, 30);
         g.setFont(currentFont);
         // start screen instructions
         if (isStartScreen) {
-            g.drawString("Press space to start", 5, 15);
+            g.drawString("Press space to start", 5, 25);
         }
 
         //Score
         g.setFont(scoreFont);
-        g.drawString("" + score, getWidth()/2 - (String.valueOf(score).length() * 6), 40);
+        g.drawString("" + score, getWidth()/2 - (String.valueOf(score).length() * 6), 55);
 
         // TODO generate pipes randomly
-        int temp = 100;
-        if (distance % 100 == 0) {
-            temp = distance;
-        }
-        g.drawRect(scroll + bgImgWidth ,0, 20, bgImage.getHeight());
+
+        g.drawRect(scroll + bgImgWidth ,0, 20, bgImage.getHeight()/3);
+        g.drawRect(scroll+bgImgWidth, (2*bgImage.getHeight()/3), 20, bgImage.getHeight()/3);
 
     }
 
