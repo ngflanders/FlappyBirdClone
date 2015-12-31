@@ -237,14 +237,14 @@ public class BirdApplet extends Applet implements Runnable{
         // TODO generate pipes randomly
 
         if (distance % bgImgWidth  == 0)
-            pipeHeight = randInt(bgImgHeight/8,bgImgHeight/2);
+            pipeHeight = randInt(bgImgHeight/10, bgImgHeight/2);
 
-        //g.drawRect(scroll + bgImgWidth ,0, 20, pipeHeight);
-        g.drawImage(downImage, scroll+bgImgWidth,-50, null);
-        g.drawImage(upImage, scroll+bgImgWidth, (2*bgImgHeight/3), null);
+        g.drawImage(downImage, scroll+bgImgWidth, -pipeHeight, null);
+        g.drawImage(upImage, scroll+bgImgWidth, bgImgHeight-pipeHeight, null);
 
 
-      //  g.drawRect(scroll+bgImgWidth, (2*bgImage.getHeight()/3), 20, bgImgHeight-pipeHeight);
+//        g.drawImage(downImage, scroll+bgImgWidth,-50, null);
+//        g.drawImage(upImage, scroll+bgImgWidth, (2*bgImgHeight/3), null);
 
         // Start screen and points ---DO NOT MOVE POSITION IN CODE---
         g.setFont(scoreFont);
