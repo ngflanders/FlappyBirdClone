@@ -176,7 +176,8 @@ public class BirdApplet extends Applet implements Runnable{
 
 
     /**
-     * Added an update method to double-buffer our game.
+     * Added an update method to double-buffer our game. Double
+     * buffering removed the "flashing"
      *
      * [1] If the |dbImage| is null, initialize it to the current
      * image of the screen. Also initialize |dbGraphics| to the
@@ -224,21 +225,15 @@ public class BirdApplet extends Applet implements Runnable{
         if (Math.abs(scroll) == bgImgWidth)
             scroll = 0;
 
-
-        //g.setColor(Color.red);
-        //g.fillOval(x_pos - radius, y_pos - radius, 2 * radius, 2 * radius);
         g.drawImage(birdImage, x_pos-radius, y_pos-radius,null);
 
-        Font currentFont = new Font("TimesRoman", Font.ITALIC, 30);
-        g.setFont(currentFont);
         // start screen instructions
+        g.setFont(scoreFont);
         if (isStartScreen) {
             g.drawString("Press space to start", 5, 25);
+        }else{
+            g.drawString("" + score, getWidth()/2 - (String.valueOf(score).length() * 6), 55);
         }
-
-        //Score
-        g.setFont(scoreFont);
-        g.drawString("" + score, getWidth()/2 - (String.valueOf(score).length() * 6), 55);
 
         // TODO generate pipes randomly
 
